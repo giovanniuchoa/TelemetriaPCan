@@ -1,0 +1,6 @@
+@TelemetriaPCan_HostAddress = http://localhost:5213
+
+GET {{TelemetriaPCan_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
