@@ -5,7 +5,7 @@ namespace TelemetriaPCan.Domain.Interfaces.Services
     public interface IVehicleService
     {
 
-        Task CreateAsync(VehicleDTO dto);
+        Task<VehicleDTO> GetOrCreateAsync(VehicleDTO dto);
 
     }
 }

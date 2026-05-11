@@ -32,7 +32,7 @@ var app = builder.Build();
 //        SerialNumber = "2019"
 //    };
 
-//    await vehicle.CreateAsync(dto);
+//    await vehicle.GetOrCreateAsync(dto);
 //}
 
 #endregion

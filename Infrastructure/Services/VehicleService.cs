@@ -1,4 +1,5 @@
-﻿using TelemetriaPCan.Domain.DTOs;
+﻿using Mapster;
+using TelemetriaPCan.Domain.DTOs;
 using TelemetriaPCan.Domain.Interfaces.Repositories;
 using TelemetriaPCan.Domain.Interfaces.Services;
 
@@ -14,7 +15,16 @@ namespace TelemetriaPCan.Infrastructure.Services
             _repository = repository;
         }
 
-        public async Task CreateAsync(VehicleDTO dto)
-            => await _repository.CreateAsync(dto);
+        public async Task<VehicleDTO> GetOrCreateAsync(VehicleDTO dto)
+        {
+            var existing = await _repository.GetBySerialNumberOrVinAsync(dto.SerialNumber, dto.Vin);
+
+            if (existing is not null)
+                return existing.Adapt<VehicleDTO>();
+
+            var created = await _repository.CreateAsync(dto);
+
+            return created.Adapt<VehicleDTO>();
+        }
     }
 }
