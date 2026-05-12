@@ -1,3 +1,6 @@
 <Solution>
-  <Project Path="TelemetriaPCan.csproj" />
+  <Project Path="src/TelemetriaPCan.Domain/TelemetriaPCan.Domain.csproj" />
+  <Project Path="src/TelemetriaPCan.Application/TelemetriaPCan.Application.csproj" />
+  <Project Path="src/TelemetriaPCan.Infrastructure/TelemetriaPCan.Infrastructure.csproj" />
+  <Project Path="src/TelemetriaPCan.API/TelemetriaPCan.API.csproj" />
 </Solution>
