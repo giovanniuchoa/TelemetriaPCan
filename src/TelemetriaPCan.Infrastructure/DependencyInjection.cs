@@ -1,9 +1,11 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using TelemetriaPCan.Application.Interfaces.Services;
 using TelemetriaPCan.Domain.Interfaces.Repositories;
 using TelemetriaPCan.Infrastructure.Data;
 using TelemetriaPCan.Infrastructure.Data.Repositories;
+using TelemetriaPCan.Infrastructure.Sources;
 
 namespace TelemetriaPCan.Infrastructure
 {
@@ -18,7 +20,26 @@ namespace TelemetriaPCan.Infrastructure
 
             services.AddTransient<IVehicleRepository, VehicleRepository>();
 
+            AddSource(services, configuration);
+
             return services;
+        }
+
+        private static void AddSource(IServiceCollection services, IConfiguration configuration)
+        {
+            var sourceType = configuration["Source:Type"] ?? "SIMULATION";
+
+            switch (sourceType?.Trim().ToLowerInvariant())
+            {
+                case "simulation":
+                case "simulated":
+                case "fake":
+                    services.AddSingleton<ISourceService, SimulatedSourceService>();
+                    break;
+
+                default:
+                    throw new InvalidOperationException($"Source type '{sourceType}' is not supported yet.");
+            }
         }
 
     }

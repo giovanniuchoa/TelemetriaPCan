@@ -1,11 +1,12 @@
 using TelemetriaPCan.Application;
-using TelemetriaPCan.Application.Interfaces.Services;
+using TelemetriaPCan.API.HostedServices;
 using TelemetriaPCan.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
+builder.Services.AddHostedService<SourceConsumerHostedService>();
 
 var app = builder.Build();
 
