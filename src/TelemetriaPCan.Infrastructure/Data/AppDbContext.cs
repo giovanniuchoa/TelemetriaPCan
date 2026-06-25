@@ -8,6 +8,7 @@ namespace TelemetriaPCan.Infrastructure.Data
     {
 
         public DbSet<Vehicle> Vehicle { get; set; }
+        public DbSet<Telemetry> Telemetry { get; set; }
 
         public AppDbContext(DbContextOptions<AppDbContext> opt) : base(opt) { }
 

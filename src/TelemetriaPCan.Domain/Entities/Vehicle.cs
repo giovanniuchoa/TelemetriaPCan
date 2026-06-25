@@ -8,6 +8,5 @@ namespace TelemetriaPCan.Domain.Entities
         public string? Vin { get; set; } //Vehicle Identification Number
         public DateTime? CreatedAt { get; set; }
 
-
     }
 }
