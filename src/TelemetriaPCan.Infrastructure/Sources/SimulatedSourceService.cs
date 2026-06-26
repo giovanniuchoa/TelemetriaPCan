@@ -18,6 +18,7 @@ namespace TelemetriaPCan.Infrastructure.Sources
         {
             var data = new byte[8];
             Random.Shared.NextBytes(data);
+            data[0] = (byte)Random.Shared.Next(0, 101);
 
             return new CanFrameDTO
             {

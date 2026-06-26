@@ -23,11 +23,7 @@ namespace TelemetriaPCan.Application.Services
             if (existing is not null)
                 return existing.Adapt<VehicleDTO>();
 
-            var toCreate = new Vehicle
-            {
-                SerialNumber = dto.SerialNumber,
-                Vin = dto.Vin
-            };
+            var toCreate = dto.Adapt<Vehicle>();
 
             var created = await _repository.CreateAsync(toCreate);
 

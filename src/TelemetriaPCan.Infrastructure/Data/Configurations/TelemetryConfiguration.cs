@@ -25,6 +25,11 @@ namespace TelemetriaPCan.Infrastructure.Data.Configurations
                 .HasColumnType("DECIMAL(5,2)")
                 .IsRequired();
 
+            builder.Property(x => x.CreatedAt)
+                .HasColumnType("DATETIME")
+                .IsRequired()
+                .HasDefaultValueSql("GETDATE()");
+
             builder.HasOne<Vehicle>()
                 .WithMany()
                 .HasForeignKey(x => x.IdVehicle)

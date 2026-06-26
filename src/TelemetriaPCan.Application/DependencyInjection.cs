@@ -10,6 +10,8 @@ namespace TelemetriaPCan.Application
         public static IServiceCollection AddApplication(this IServiceCollection services)
         {
             services.AddTransient<IVehicleService, VehicleService>();
+            services.AddTransient<ITelemetryService, TelemetryService>();
+            services.AddSingleton<IFrameTranslatorService, FrameTranslatorService>();
 
             return services;
         }

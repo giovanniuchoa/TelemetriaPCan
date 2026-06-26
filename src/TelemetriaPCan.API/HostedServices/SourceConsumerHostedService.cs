@@ -1,3 +1,4 @@
+using Mapster;
 using TelemetriaPCan.Application.DTOs;
 using TelemetriaPCan.Application.Interfaces.Services;
 
@@ -6,13 +7,13 @@ namespace TelemetriaPCan.API.HostedServices
     public class SourceConsumerHostedService : BackgroundService
     {        
 
-        private readonly IServiceScopeFactory _scopeFactory; // p criar um scope pra cada chamada
         private readonly ISourceService _sourceService;
+        private readonly IServiceScopeFactory _scope; // p criar um scope pra cada chamada
 
-        public SourceConsumerHostedService(IServiceScopeFactory scopeFactory, ISourceService sourceService)
+        public SourceConsumerHostedService(ISourceService sourceService, IServiceScopeFactory scope)
         {
-            _scopeFactory = scopeFactory;
             _sourceService = sourceService;
+            _scope = scope; 
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -24,13 +25,15 @@ namespace TelemetriaPCan.API.HostedServices
                 {
                     var frame = await _sourceService.ReadAsync(stoppingToken);
 
-                    var vehicleDTO = new VehicleDTO
+                    using (var scope = _scope.CreateScope())
                     {
-                        SerialNumber = frame.SerialNumber,
-                        Vin = frame.Vin
-                    };
 
-                    await GetOrCreateVehicleAsync(vehicleDTO);
+                        var _telemetry = scope.ServiceProvider.GetRequiredService<ITelemetryService>();
+
+                        await _telemetry.ProcessFramesAsync(frame);
+
+                    }                                           
+
                 }
                 catch (OperationCanceledException) when (stoppingToken.IsCancellationRequested)
                 {
@@ -41,16 +44,6 @@ namespace TelemetriaPCan.API.HostedServices
                     await Task.Delay(TimeSpan.FromSeconds(5), stoppingToken);
                 }
             }
-
-        }
-
-        private async Task GetOrCreateVehicleAsync(VehicleDTO vehicleDTO)
-        {
-
-            using var scope = _scopeFactory.CreateScope();
-            var vehicleService = scope.ServiceProvider.GetRequiredService<IVehicleService>();
-
-            var vehicle = await vehicleService.GetOrCreateAsync(vehicleDTO);
 
         }
 

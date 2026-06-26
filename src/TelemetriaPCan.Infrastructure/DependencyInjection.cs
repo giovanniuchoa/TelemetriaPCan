@@ -19,6 +19,7 @@ namespace TelemetriaPCan.Infrastructure
             services.AddDbContext<AppDbContext>(options => options.UseSqlServer(connectionString));
 
             services.AddTransient<IVehicleRepository, VehicleRepository>();
+            services.AddTransient<ITelemetryRepository, TelemetryRepository>();
 
             AddSource(services, configuration);
 
@@ -32,8 +33,6 @@ namespace TelemetriaPCan.Infrastructure
             switch (sourceType?.Trim().ToLowerInvariant())
             {
                 case "simulation":
-                case "simulated":
-                case "fake":
                     services.AddSingleton<ISourceService, SimulatedSourceService>();
                     break;
 
